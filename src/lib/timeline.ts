@@ -152,6 +152,13 @@ const MIN_MARGIN_FRACTION = 0.25;
 const MIN_MARGIN_DAYS = 14;
 
 /**
+ * ISD refreshes the table about once a week, so a 30-day window holds only a handful of real
+ * updates. Below this count a single unusually large step dominates the rate, so a wider window
+ * is the more honest basis for the headline number.
+ */
+const MIN_OBSERVATIONS_FOR_CENTRAL = 4;
+
+/**
  * Estimate when an application submitted on `submissionDate` will be reached.
  *
  * The central rate is the most recent window with real observations behind it, because the
@@ -175,9 +182,11 @@ export function estimate(
   const rates = windows.map((pace) => pace.rate).filter((rate) => rate > 0);
   if (rates.length === 0) return { status: 'stalled', gapDays };
 
-  const preferred = [series.pace.d30, series.pace.d90, series.pace.all].find(
-    (pace) => pace !== null && pace.rate > 0,
-  )!;
+  const ordered = [series.pace.d30, series.pace.d90, series.pace.all];
+  const preferred =
+    ordered.find(
+      (pace) => pace !== null && pace.rate > 0 && pace.observations >= MIN_OBSERVATIONS_FOR_CENTRAL,
+    ) ?? ordered.find((pace) => pace !== null && pace.rate > 0)!;
 
   // The projection starts at the observation the gap was measured at, which may be days old,
   // so clamp every scenario to today — an ETA in the past is never a useful answer.

@@ -52,6 +52,12 @@ const fmtDate = (iso: string): string =>
 const fmtShort = (iso: string): string =>
   new Date(iso).toLocaleDateString('en-IE', { month: 'short', year: '2-digit' });
 
+/** Month-and-year ticks repeat themselves once the domain is only a few months wide. */
+const fmtTick = (value: number, spanDays: number): string =>
+  spanDays <= 200
+    ? new Date(value).toLocaleDateString('en-IE', { day: 'numeric', month: 'short' })
+    : fmtShort(new Date(value).toISOString());
+
 const fmtWeeks = (days: number): string => {
   const weeks = days / 7;
   if (weeks < 1) return `${Math.max(Math.round(days), 0)} days`;
@@ -254,6 +260,13 @@ function renderWaitChart(timeline: Timeline): void {
       )}. Dashed segments span gaps where no archived update exists.`;
   }
 
+  // The story lives after the split: for 18 months every category was one shared queue, so a
+  // full-history domain spends ~85% of its pixels on five identical overlapping lines. Default
+  // to the era where the categories actually differ, and start after the Jan-May archive gap.
+  const splitTime = timeline.categorySplitAt ? toTime(timeline.categorySplitAt) : null;
+  const fullMin = Math.min(...datasets.flatMap((set) => set.data.map((point) => point.x)));
+  const recentMin = splitTime ? splitTime - 17 * DAY : fullMin;
+
   waitChart = new Chart($<HTMLCanvasElement>('#wait-chart'), {
     type: 'line',
     data: { datasets },
@@ -264,9 +277,15 @@ function renderWaitChart(timeline: Timeline): void {
       scales: {
         x: {
           type: 'linear',
+          min: recentMin,
           ticks: {
             maxTicksLimit: 6,
-            callback: (value) => fmtShort(new Date(Number(value)).toISOString()),
+            callback: (value) => {
+              const scale = waitChart?.options.scales?.x;
+              const min = Number(scale?.min ?? recentMin);
+              const max = Number(scale?.max ?? Date.now());
+              return fmtTick(Number(value), (max - min) / DAY);
+            },
             color: MUTED,
           },
           grid: { color: GRID },
@@ -294,12 +313,17 @@ function renderWaitChart(timeline: Timeline): void {
 
   const toggles = $('#stamp-toggles');
   toggles.innerHTML = '';
+  // Start with the best and worst queue shown. The contrast between them — one collapsing to
+  // nearly caught up while the other grew — is the story; five overlapping lines hide it.
+  const extremes = seriesList.length > 2 ? extremeLabels(seriesList) : null;
   seriesList.forEach((series, index) => {
+    const shown = !extremes || extremes.has(series.label);
+    waitChart!.setDatasetVisibility(index, shown);
     const button = document.createElement('button');
     button.type = 'button';
     button.textContent = series.label;
     button.style.color = COLOURS[index % COLOURS.length];
-    button.setAttribute('aria-pressed', 'true');
+    button.setAttribute('aria-pressed', String(shown));
     button.addEventListener('click', () => {
       const visible = waitChart!.isDatasetVisible(index);
       waitChart!.setDatasetVisibility(index, !visible);
@@ -308,6 +332,35 @@ function renderWaitChart(timeline: Timeline): void {
     });
     toggles.appendChild(button);
   });
+
+  const range = $('#range-toggle');
+  range.innerHTML = '';
+  const ranges: Array<[string, number]> = [
+    ['Since the split', recentMin],
+    ['All history', fullMin],
+  ];
+  ranges.forEach(([text, min], index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = text;
+    button.setAttribute('aria-pressed', String(index === 0));
+    button.addEventListener('click', () => {
+      waitChart!.options.scales!.x!.min = min;
+      waitChart!.update();
+      range.querySelectorAll('button').forEach((other, otherIndex) =>
+        other.setAttribute('aria-pressed', String(otherIndex === index)),
+      );
+    });
+    range.appendChild(button);
+  });
+
+  waitChart.update();
+}
+
+/** The queues with the smallest and largest current wait — the two ends of the fan-out. */
+function extremeLabels(seriesList: StampSeries[]): Set<string> {
+  const sorted = [...seriesList].sort((a, b) => lagDays(a.current) - lagDays(b.current));
+  return new Set([sorted[0].label, sorted[sorted.length - 1].label]);
 }
 
 /**
@@ -343,7 +396,9 @@ function annotatePersonal(series: StampSeries, submitted: string, outcome: Estim
       color: '#0f1720',
       backgroundColor: '#f2f2f2',
       font: { size: 10 },
-      xAdjust: -46,
+      // Shifted left of centre so it clears the "today" marker; on narrow charts the
+      // midpoint is already close to the axis, so no shift is needed.
+      xAdjust: window.innerWidth < 700 ? 0 : -46,
     },
   };
 
@@ -398,8 +453,9 @@ function annotatePersonal(series: StampSeries, submitted: string, outcome: Estim
       backgroundColor: '#2fb98d',
       font: { size: 11, weight: 'bold' },
       yAdjust: -20,
-      // The ETA sits at the right edge, so pull the label inward on narrow screens.
-      xAdjust: window.innerWidth < 700 ? -64 : 0,
+      // The axis extends to fit the ETA, so the point always lands near the right edge —
+      // keep the label inside the plot area rather than clipped against it.
+      xAdjust: -70,
     };
   }
 

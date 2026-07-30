@@ -267,6 +267,23 @@ button:hover {
   border-color: currentColor;
 }
 
+/* The range control is secondary to the category toggles — keep it visually quieter. */
+.toggles.ranges {
+  margin-top: -0.25rem;
+}
+
+.toggles.ranges button {
+  color: var(--muted);
+  font-size: 0.78rem;
+  padding: 0.2rem 0.6rem;
+}
+
+.toggles.ranges button[aria-pressed='true'] {
+  color: var(--text);
+  background: var(--border);
+  border-color: var(--border);
+}
+
 .chart-wrap {
   position: relative;
   height: 380px;

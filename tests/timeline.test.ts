@@ -188,3 +188,29 @@ test('seriesForStamp falls back to the catch-all category', () => {
   assert.equal(seriesForStamp(timeline, '4')!.stamp, '4');
   assert.equal(seriesForStamp(timeline, '5')!.stamp, 'OTHER');
 });
+
+test('a thin 30-day window does not drive the central estimate', () => {
+  // ISD refreshes weekly, so a 30-day window can rest on two updates. If one of them is an
+  // unusually large step the rate spikes; the wider window is the honest basis.
+  const spiky = makeSeries({
+    pace: {
+      d30: { rate: 3, spanDays: 21, observations: 3 },
+      d90: { rate: 1, spanDays: 70, observations: 8 },
+      all: { rate: 0.9, spanDays: 600, observations: 19 },
+    },
+  });
+  const outcome = estimate(spiky, '2026-01-01', '2026-03-01T00:00:00Z');
+  assert.equal(outcome.status, 'estimated');
+  // 31 days of gap at the d90 rate of 1, not the d30 rate of 3.
+  assert.equal(outcome.central!.rate, 1);
+
+  // With enough observations behind it, the recent window is still preferred.
+  const solid = makeSeries({
+    pace: {
+      d30: { rate: 3, spanDays: 28, observations: 5 },
+      d90: { rate: 1, spanDays: 70, observations: 8 },
+      all: { rate: 0.9, spanDays: 600, observations: 19 },
+    },
+  });
+  assert.equal(estimate(solid, '2026-01-01', '2026-03-01T00:00:00Z').central!.rate, 3);
+});
