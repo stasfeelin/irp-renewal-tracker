@@ -1,5 +1,7 @@
 # IRP Renewal Tracker
 
+**Live: https://stasfeelin.github.io/irp-renewal-tracker/**
+
 An unofficial web app that tracks how fast Irish Residence Permit (IRP) renewal applications are
 being processed, keeps the history that the official page throws away, and estimates when your
 own application will be reached.
@@ -73,8 +75,9 @@ Useful flags: `node scripts/collect.ts --limit=5` (only the newest snapshots),
 
 ## Deployment
 
-Push to `main` with GitHub Pages set to "GitHub Actions" as the source. The
-`update-and-deploy` workflow runs twice daily, commits any new observations, and publishes.
+Deployed to GitHub Pages at https://stasfeelin.github.io/irp-renewal-tracker/ with the Pages source
+set to "GitHub Actions". The `update-and-deploy` workflow runs on every push to `main` and twice
+daily on a cron, commits any new observations back to the repo, and publishes the rebuilt site.
 
 ## Disclaimer
 
