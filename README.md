@@ -52,6 +52,28 @@ The queue is a stressful thing to be stuck in, so the app is deliberately conser
   example `1, 1H` splitting apart) does not break the history.
 - Snapshots where the archive captured a Cloudflare challenge instead of the page are skipped.
 
+## Licensing and re-use
+
+The code is MIT licensed (see `LICENSE`). The underlying dates are © Department of Justice.
+
+ISD's own terms and conditions expressly permit re-use: *"You may re-use the information on this
+website free of charge in any format… we encourage the re-use of the information that we produce"*,
+subject to conditions that this project is built to satisfy:
+
+| Condition | How this project meets it |
+| --- | --- |
+| Acknowledge the source and their copyright | Footer credit and link on every page, plus `LICENSE` |
+| Reproduce the information accurately | Published dates are stored verbatim and never adjusted; parsing is covered by tests |
+| Do not use the information in a misleading way | Derived figures are labelled as this site's own; see "Honest-numbers rules" above |
+| Not principally for advertising or promoting a product | No ads, no tracking, no commercial content |
+| Not for illegal or dishonest purposes | Informational only |
+
+The site's `robots.txt` allows crawling (`Disallow:` empty, `Crawl-delay: 10`). In practice this
+project does not crawl the live site at all — it reads the Internet Archive, at a polite rate.
+
+No personal data is collected. The estimator runs entirely in the browser; the submission date you
+type is never transmitted anywhere and there is no backend, no cookies and no analytics.
+
 ## Development
 
 ```bash
