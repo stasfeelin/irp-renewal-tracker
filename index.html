@@ -69,14 +69,12 @@
       </section>
 
       <details id="detail" class="card">
-        <summary>The queue front, and how the estimate is made</summary>
-        <p class="muted">
-          The line shows the submission date ISD had reached on any given day. Your submission date
-          is the horizontal marker: the estimate is where the line is projected to cross it.
-        </p>
-        <div class="chart-wrap"><canvas id="front-chart"></canvas></div>
-        <h3>Method</h3>
+        <summary>How the estimate is made</summary>
         <ul class="method">
+          <li>
+            Your own wait grows by exactly one week per week, so your line on the chart above
+            rises at a fixed slope. You are reached where it meets the queue's wait.
+          </li>
           <li>
             Speed is measured between real published updates inside each window, so a long gap
             between archived snapshots cannot masquerade as a burst of progress.

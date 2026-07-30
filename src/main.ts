@@ -206,7 +206,6 @@ function renderEstimate(timeline: Timeline, series: StampSeries, submitted: stri
 }
 
 let waitChart: Chart | undefined;
-let frontChart: Chart | undefined;
 
 function renderWaitChart(timeline: Timeline): void {
   const seriesList = distinctSeries(timeline);
@@ -311,165 +310,100 @@ function renderWaitChart(timeline: Timeline): void {
   });
 }
 
-/** Step-function data so the front is drawn as horizontal-then-vertical steps. */
-function stepData(series: StampSeries): Array<{ x: number; y: number }> {
-  const points: Array<{ x: number; y: number }> = [];
-  series.points.forEach((point, index) => {
-    if (index > 0) {
-      points.push({ x: toTime(point.observedAt), y: toTime(series.points[index - 1].date) });
-    }
-    points.push({ x: toTime(point.observedAt), y: toTime(point.date) });
-  });
-  return points;
-}
-
-function renderFrontChart(timeline: Timeline): void {
-  const datasets = distinctSeries(timeline).map((series, index) => ({
-    label: series.label,
-    data: stepData(series),
-    borderColor: COLOURS[index % COLOURS.length],
-    backgroundColor: COLOURS[index % COLOURS.length],
-    pointRadius: 0,
-    borderWidth: 2,
-    tension: 0,
-    segment: gapSegment,
-  }));
-
-  frontChart = new Chart($<HTMLCanvasElement>('#front-chart'), {
-    type: 'line',
-    data: { datasets },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { mode: 'nearest', intersect: false },
-      scales: {
-        x: {
-          type: 'linear',
-          ticks: {
-            maxTicksLimit: 6,
-            callback: (value) => fmtShort(new Date(Number(value)).toISOString()),
-            color: MUTED,
-          },
-          grid: { color: GRID },
-          title: { display: true, text: 'Date ISD published the update', color: MUTED },
-        },
-        y: {
-          type: 'linear',
-          ticks: {
-            maxTicksLimit: 6,
-            callback: (value) => fmtShort(new Date(Number(value)).toISOString()),
-            color: MUTED,
-          },
-          grid: { color: GRID },
-          title: { display: true, text: 'Submissions reached', color: MUTED },
-        },
-      },
-      plugins: {
-        legend: { labels: { color: MUTED, boxWidth: 12 } },
-        annotation: { annotations: {} },
-        tooltip: {
-          callbacks: {
-            title: (items) => fmtDate(new Date(Number(items[0].parsed.x)).toISOString()),
-            label: (item) =>
-              `${item.dataset.label}: reached ${fmtDate(
-                new Date(Number(item.parsed.y)).toISOString(),
-              )}`,
-          },
-        },
-      },
-    },
-  });
-}
-
-/** Draw the user's submission date, today, and their projected ETA onto both charts. */
+/**
+ * Draw the user's own wait onto the wait chart. Their wait rises by exactly one week per
+ * week, so the ETA is where that rising line meets the queue's own wait — a crossing the
+ * reader can see, rather than a number to take on trust.
+ */
 function annotatePersonal(series: StampSeries, submitted: string, outcome: Estimate): void {
-  if (!waitChart || !frontChart) return;
+  if (!waitChart) return;
 
-  const personalWait = (Date.now() - toTime(submitted)) / DAY / 7;
-  const waitAnnotations = waitChart.options.plugins!.annotation!.annotations as Record<
+  const submittedAt = toTime(submitted);
+  const nowWait = (Date.now() - submittedAt) / DAY / 7;
+  const annotations = waitChart.options.plugins!.annotation!.annotations as Record<
     string,
     AnnotationOptions
   >;
-  waitAnnotations.you = {
-    type: 'line',
-    yMin: personalWait,
-    yMax: personalWait,
-    borderColor: '#f2f2f2',
-    borderWidth: 1,
-    borderDash: [5, 5],
-    label: {
-      display: true,
-      content: `you have waited ${fmtWeeks((Date.now() - toTime(submitted)) / DAY)}`,
-      position: 'start',
-      color: '#0f1720',
-      backgroundColor: '#f2f2f2',
-      font: { size: 10 },
-    },
-  };
-  waitChart.update();
 
-  const frontAnnotations = frontChart.options.plugins!.annotation!.annotations as Record<
-    string,
-    AnnotationOptions
-  >;
-  frontAnnotations.submitted = {
+  for (const key of ['you', 'youProjected', 'queueProjected', 'eta', 'etaLabel'])
+    delete annotations[key];
+
+  annotations.you = {
     type: 'line',
-    yMin: toTime(submitted),
-    yMax: toTime(submitted),
-    borderColor: '#f2f2f2',
-    borderWidth: 1,
-    borderDash: [5, 5],
-    label: {
-      display: true,
-      content: `your submission (${fmtDate(submitted)})`,
-      position: 'start',
-      color: '#0f1720',
-      backgroundColor: '#f2f2f2',
-      font: { size: 10 },
-    },
-  };
-  frontAnnotations.today = {
-    type: 'line',
-    xMin: Date.now(),
+    xMin: submittedAt,
     xMax: Date.now(),
-    borderColor: MUTED,
-    borderWidth: 1,
-    borderDash: [4, 4],
+    yMin: 0,
+    yMax: nowWait,
+    borderColor: '#f2f2f2',
+    borderWidth: 2,
+    label: {
+      display: true,
+      content: `you: waiting ${fmtWeeks((Date.now() - submittedAt) / DAY)}`,
+      position: '50%',
+      color: '#0f1720',
+      backgroundColor: '#f2f2f2',
+      font: { size: 10 },
+      xAdjust: -46,
+    },
   };
 
   if (outcome.status === 'estimated') {
-    const { central } = outcome;
-    frontAnnotations.projection = {
+    const etaTime = toTime(outcome.central!.etaIso);
+    const etaWait = (etaTime - submittedAt) / DAY / 7;
+
+    annotations.youProjected = {
       type: 'line',
-      xMin: toTime(series.current.observedAt),
-      xMax: toTime(central!.etaIso),
-      yMin: toTime(series.current.date),
-      yMax: toTime(submitted),
-      borderColor: '#2fb98d',
+      xMin: Date.now(),
+      xMax: etaTime,
+      yMin: nowWait,
+      yMax: etaWait,
+      borderColor: '#f2f2f2',
       borderWidth: 2,
       borderDash: [6, 4],
     };
-    frontAnnotations.eta = {
+    // The queue's own wait, projected to where it meets yours. Drawing both makes the ETA a
+    // visible crossing instead of a number the reader has to trust.
+    annotations.queueProjected = {
+      type: 'line',
+      xMin: toTime(series.current.observedAt),
+      xMax: etaTime,
+      yMin: lagDays(series.current) / 7,
+      yMax: etaWait,
+      borderColor: 'rgba(242, 242, 242, 0.45)',
+      borderWidth: 2,
+      borderDash: [2, 4],
+      label: {
+        display: true,
+        content: 'queue, projected',
+        position: 'start',
+        color: MUTED,
+        backgroundColor: 'transparent',
+        font: { size: 10 },
+        yAdjust: -12,
+      },
+    };
+    annotations.eta = {
       type: 'point',
-      xValue: toTime(central!.etaIso),
-      yValue: toTime(submitted),
+      xValue: etaTime,
+      yValue: etaWait,
       backgroundColor: '#2fb98d',
       radius: 5,
     };
-    frontAnnotations.etaLabel = {
+    annotations.etaLabel = {
       type: 'label',
-      xValue: toTime(central!.etaIso),
-      yValue: toTime(submitted),
-      content: [`≈ ${fmtDate(central!.etaIso)}`],
+      xValue: etaTime,
+      yValue: etaWait,
+      content: [`your turn ≈ ${fmtDate(outcome.central!.etaIso)}`],
       color: '#06231b',
       backgroundColor: '#2fb98d',
       font: { size: 11, weight: 'bold' },
-      yAdjust: -22,
-      xAdjust: -40,
+      yAdjust: -20,
+      // The ETA sits at the right edge, so pull the label inward on narrow screens.
+      xAdjust: window.innerWidth < 700 ? -64 : 0,
     };
   }
-  frontChart.update();
-  $<HTMLDetailsElement>('#detail').open = true;
+
+  waitChart.update();
 }
 
 function setupEstimator(timeline: Timeline): void {
@@ -514,7 +448,6 @@ async function init(): Promise<void> {
     } archived snapshots of the official page.`;
 
     renderWaitChart(timeline);
-    renderFrontChart(timeline);
     renderStatus(timeline);
     setupEstimator(timeline);
   } catch (error) {
