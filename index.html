@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IRP Renewal Tracker — Irish residence permit processing pace</title>
+    <title>IRP Renewal Tracker — how long is the wait?</title>
     <meta
       name="description"
-      content="Track how fast Irish Residence Permit (IRP) renewal applications are being processed, see the history of published processing dates, and estimate when your application will be reached."
+      content="How long Irish Residence Permit (IRP) renewal applications are waiting, whether the wait is growing or shrinking, and an estimate of when your own application will be reached."
     />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/src/style.css" />
@@ -15,31 +15,12 @@
     <header class="site-header">
       <h1>IRP Renewal Tracker</h1>
       <p class="tagline">
-        History and pace of the Irish Immigration Service Delivery (ISD) renewal processing
-        timelines — plus an estimate of when your application will be reached.
+        How long Irish Residence Permit renewals are waiting, whether that wait is growing or
+        shrinking, and roughly when your own application will be reached.
       </p>
     </header>
 
     <main>
-      <section id="status" class="card">
-        <h2>Current processing timelines</h2>
-        <p class="muted" id="freshness">Loading…</p>
-        <div class="table-wrap">
-          <table id="status-table">
-            <thead>
-              <tr>
-                <th>Stamp category</th>
-                <th>Processed up to</th>
-                <th>Last advance</th>
-                <th>Pace (30d)</th>
-                <th>Pace (90d)</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </section>
-
       <section id="estimator" class="card">
         <h2>When will my application be processed?</h2>
         <form id="estimate-form">
@@ -53,27 +34,63 @@
           </label>
           <button type="submit">Estimate</button>
         </form>
+        <p id="headline-summary" class="headline-summary">Loading…</p>
         <div id="estimate-result" class="result" hidden></div>
       </section>
 
-      <section id="history" class="card">
-        <h2>Processing history</h2>
+      <section id="wait" class="card">
+        <h2>How long is the wait?</h2>
         <p class="muted">
-          Each line shows the submission date being processed over time. A steeper line means the
-          queue is moving faster; a flat line means it has stalled.
+          Weeks between the day ISD published an update and the submission date they had reached.
+          A rising line means the queue is falling further behind; a falling line means it is
+          catching up.
         </p>
         <div id="stamp-toggles" class="toggles"></div>
-        <div class="chart-wrap"><canvas id="history-chart"></canvas></div>
+        <div class="chart-wrap"><canvas id="wait-chart"></canvas></div>
+        <p class="muted footnote" id="split-note"></p>
       </section>
 
-      <section id="pace-history" class="card">
-        <h2>Pace over time</h2>
-        <p class="muted">
-          Backlog days cleared per calendar day, measured over a rolling 30-day window. Above 1.0
-          means the queue is catching up faster than time passes.
-        </p>
-        <div class="chart-wrap"><canvas id="pace-chart"></canvas></div>
+      <section id="status" class="card">
+        <h2>Where each category stands today</h2>
+        <p class="muted" id="freshness">Loading…</p>
+        <div class="table-wrap">
+          <table id="status-table">
+            <thead>
+              <tr>
+                <th>Stamp category</th>
+                <th>Now processing submissions from</th>
+                <th>Wait right now</th>
+                <th>Trend (last 30 days)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </section>
+
+      <details id="detail" class="card">
+        <summary>The queue front, and how the estimate is made</summary>
+        <p class="muted">
+          The line shows the submission date ISD had reached on any given day. Your submission date
+          is the horizontal marker: the estimate is where the line is projected to cross it.
+        </p>
+        <div class="chart-wrap"><canvas id="front-chart"></canvas></div>
+        <h3>Method</h3>
+        <ul class="method">
+          <li>
+            Speed is measured between real published updates inside each window, so a long gap
+            between archived snapshots cannot masquerade as a burst of progress.
+          </li>
+          <li>
+            The central estimate uses the most recent window with enough updates behind it, because
+            the long-run average includes a period when the queue behaved very differently.
+          </li>
+          <li>
+            The faster/slower scenarios are widened to a minimum spread — the honest uncertainty
+            here is weeks, not days.
+          </li>
+        </ul>
+      </details>
     </main>
 
     <footer>

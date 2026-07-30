@@ -14,14 +14,30 @@ without doing the arithmetic by hand every week.
 - **Collects history.** Archived versions of the official page are read from the Wayback Machine
   and parsed into an append-only dataset (`data/observations.json`). History currently reaches
   back to November 2024.
-- **Measures pace.** For every stamp code it derives a step-function series and the pace —
-  *backlog days cleared per calendar day* — over 30-day, 90-day and all-time windows.
-  Above `1.00 d/day` means the queue is catching up faster than time passes.
-- **Estimates your date.** Enter your stamp category and submission date to get a central ETA with
-  an optimistic/pessimistic range, plus the expected card-in-the-post date (+15 business days).
+- **Shows the wait, in weeks.** The headline chart plots the gap between the day ISD published an
+  update and the submission date they had reached — i.e. how long the queue is actually running
+  behind. A rising line means it is falling further behind. Stamp 4's wait has grown from about
+  3 weeks in late 2024 to roughly 18 weeks.
+- **Estimates your date.** Enter your stamp category and submission date to get a central ETA, a
+  faster/slower range, and a soft expectation for the card arriving by post.
 
 The site is fully static: a GitHub Actions cron job refreshes the data, commits it, and deploys to
 GitHub Pages. No server, no accounts, no cost.
+
+## Honest-numbers rules
+
+The queue is a stressful thing to be stuck in, so the app is deliberately conservative:
+
+- Speed is measured **between two real published updates** inside each window. The archive has
+  sparse monthly snapshots before 2026 and dense daily ones after; interpolating from the window
+  boundary let a multi-month advance be credited to a 30-day window, inflating the measured speed
+  several-fold and producing over-optimistic ETAs.
+- The central estimate uses the **most recent window that has enough updates behind it**, not the
+  long-run average, which is dominated by a period when the queue behaved very differently.
+- The faster/slower range is widened to a minimum spread, so it can never imply day-level
+  precision that the data cannot support.
+- Colour encodes the **direction of the wait**, not raw speed: a category can be clearing days
+  quickly and still be falling further behind.
 
 ## Data notes
 

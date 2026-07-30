@@ -7,6 +7,7 @@
   --accent: #2fb98d;
   --accent-2: #4c9be8;
   --warn: #e0a44a;
+  --danger: #e2748a;
   --border: #26364a;
   --radius: 12px;
   color-scheme: dark;
@@ -96,14 +97,64 @@ tbody tr:last-child td {
   border-bottom: none;
 }
 
-.pace-good {
+.trend-better {
   color: var(--accent);
 }
-.pace-slow {
-  color: var(--warn);
+.trend-steady {
+  color: var(--accent-2);
 }
-.pace-none {
+.trend-worse {
+  color: var(--danger);
+}
+.trend-unknown {
   color: var(--muted);
+}
+
+.headline-summary {
+  font-size: 1.1rem;
+  margin: 1.1rem 0 0;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--border);
+}
+
+.footnote {
+  margin: 0.75rem 0 0;
+}
+
+details summary {
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 600;
+  list-style: none;
+}
+
+details summary::before {
+  content: '▸ ';
+  color: var(--muted);
+}
+
+details[open] summary::before {
+  content: '▾ ';
+}
+
+details h3 {
+  font-size: 1rem;
+  margin: 1.25rem 0 0.4rem;
+}
+
+.method {
+  color: var(--muted);
+  font-size: 0.88rem;
+  padding-left: 1.1rem;
+  margin: 0;
+}
+
+.method li {
+  margin-bottom: 0.35rem;
+}
+
+.range .central {
+  border-color: var(--accent);
 }
 
 form {
@@ -245,6 +296,56 @@ footer a {
     min-width: 100%;
   }
   label {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  /* The status table has no useful horizontal scroll affordance on a phone, so stack it. */
+  #status-table thead {
+    display: none;
+  }
+
+  #status-table,
+  #status-table tbody,
+  #status-table tr,
+  #status-table td {
+    display: block;
+    width: 100%;
+  }
+
+  #status-table tr {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.4rem 0.2rem;
+    margin-bottom: 0.6rem;
+    background: var(--card-2);
+  }
+
+  #status-table td {
+    border-bottom: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    white-space: normal;
+    padding: 0.3rem 0.7rem;
+  }
+
+  #status-table td::before {
+    content: attr(data-label);
+    color: var(--muted);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex: 0 0 45%;
+  }
+
+  #status-table td:first-child {
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+
+  .range div {
     width: 100%;
   }
 }

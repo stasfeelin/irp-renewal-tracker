@@ -8,8 +8,10 @@ export interface SeriesPoint {
 export interface Pace {
   /** Backlog days cleared per calendar day. */
   rate: number;
-  /** Calendar days actually covered by the window. */
+  /** Calendar days between the two observations used. */
   spanDays: number;
+  /** How many observations the window contained. */
+  observations: number;
 }
 
 export interface StampSeries {
@@ -42,6 +44,8 @@ export interface Timeline {
   sourceUrl: string;
   latestObservedAt: string;
   observationCount: number;
+  /** When ISD started publishing per-category dates; before this there was one shared queue. */
+  categorySplitAt: string | null;
   groups: TimelineGroup[];
   stamps: StampSeries[];
 }
@@ -67,8 +71,12 @@ export function valueAt(points: SeriesPoint[], at: number): string | null {
 }
 
 /**
- * Backlog days cleared per calendar day over the trailing `windowDays`.
- * Returns null when the window is too short to be meaningful.
+ * Backlog days cleared per calendar day over the trailing `windowDays`, measured between two
+ * *actual observations* inside the window.
+ *
+ * Using observed endpoints matters: the archive has sparse monthly snapshots before 2026 and
+ * dense daily ones after. Interpolating from the window's start instant would credit an advance
+ * that accrued over several months to a 30-day window, inflating the rate several-fold.
  */
 export function paceOverWindow(
   points: SeriesPoint[],
@@ -78,29 +86,51 @@ export function paceOverWindow(
 ): Pace | null {
   if (points.length < 2) return null;
   const now = toTime(nowIso);
-  const seriesStart = toTime(points[0].observedAt);
-  const start = windowDays === null ? seriesStart : Math.max(now - windowDays * DAY_MS, seriesStart);
-  const end = Math.min(now, toTime(points[points.length - 1].observedAt));
-  const spanDays = (end - start) / DAY_MS;
+  const start = windowDays === null ? -Infinity : now - windowDays * DAY_MS;
+
+  const inWindow = points.filter((point) => {
+    const at = toTime(point.observedAt);
+    return at >= start && at <= now;
+  });
+  if (inWindow.length < 2) return null;
+
+  const first = inWindow[0];
+  const last = inWindow[inWindow.length - 1];
+  const spanDays = daysBetween(first.observedAt, last.observedAt);
   if (spanDays < minSpanDays) return null;
 
-  const startValue = valueAt(points, start);
-  const endValue = valueAt(points, end);
-  if (!startValue || !endValue) return null;
-
-  const cleared = daysBetween(startValue, endValue);
-  return { rate: cleared / spanDays, spanDays };
+  return {
+    rate: daysBetween(first.date, last.date) / spanDays,
+    spanDays,
+    observations: inWindow.length,
+  };
 }
 
+/** How long an application submitted today would wait, in days, at the observed moment. */
+export const lagDays = (point: SeriesPoint): number => daysBetween(point.date, point.observedAt);
+
+/**
+ * How the wait itself is changing, in days of wait added per calendar day.
+ * Positive means the queue is falling further behind; negative means it is catching up.
+ */
+export const waitTrend = (rate: number): number => 1 - rate;
+
 export type EstimateStatus = 'reached' | 'estimated' | 'stalled' | 'insufficient-data';
+
+export interface Scenario {
+  etaIso: string;
+  /** Days from the observation the projection starts at. */
+  days: number;
+  rate: number;
+}
 
 export interface Estimate {
   status: EstimateStatus;
   /** Backlog days between the processed-up-to date and the user's submission date. */
   gapDays: number;
-  central?: { etaIso: string; days: number; rate: number };
-  optimistic?: { etaIso: string; days: number; rate: number };
-  pessimistic?: { etaIso: string; days: number; rate: number };
+  central?: Scenario;
+  optimistic?: Scenario;
+  pessimistic?: Scenario;
   /** Central ETA plus 15 business days for the card to arrive by post. */
   cardIso?: string;
 }
@@ -117,40 +147,62 @@ export function addBusinessDays(iso: string, count: number): string {
   return date.toISOString();
 }
 
+/** Never present a window narrower than this share of the projection, or this many days. */
+const MIN_MARGIN_FRACTION = 0.25;
+const MIN_MARGIN_DAYS = 14;
+
 /**
  * Estimate when an application submitted on `submissionDate` will be reached.
- * Projection starts from the moment the current value was observed, since the gap is
- * measured at that moment.
+ *
+ * The central rate is the most recent window with real observations behind it, because the
+ * long-run average is dominated by a period when the queue behaved very differently. The
+ * optimistic/pessimistic scenarios are widened to a minimum margin so the result never implies
+ * precision the data cannot support.
  */
-export function estimate(series: StampSeries, submissionDate: string): Estimate {
+export function estimate(
+  series: StampSeries,
+  submissionDate: string,
+  nowIso: string = new Date().toISOString(),
+): Estimate {
   const gapDays = daysBetween(series.current.date, submissionDate);
   if (gapDays <= 0) return { status: 'reached', gapDays };
 
-  const rates = [series.pace.d30, series.pace.d90, series.pace.all]
-    .filter((p): p is Pace => p !== null)
-    .map((p) => p.rate);
+  const windows = [series.pace.d30, series.pace.d90, series.pace.all].filter(
+    (pace): pace is Pace => pace !== null,
+  );
+  if (windows.length === 0) return { status: 'insufficient-data', gapDays };
 
-  if (rates.length === 0) return { status: 'insufficient-data', gapDays };
+  const rates = windows.map((pace) => pace.rate).filter((rate) => rate > 0);
+  if (rates.length === 0) return { status: 'stalled', gapDays };
 
-  const positive = rates.filter((rate) => rate > 0);
-  if (positive.length === 0) return { status: 'stalled', gapDays };
+  const preferred = [series.pace.d30, series.pace.d90, series.pace.all].find(
+    (pace) => pace !== null && pace.rate > 0,
+  )!;
 
-  const centralRate = (series.pace.d90 ?? series.pace.all ?? series.pace.d30)!.rate;
-  const project = (rate: number) => {
-    const days = gapDays / rate;
-    return { etaIso: addDays(series.current.observedAt, days), days, rate };
+  // The projection starts at the observation the gap was measured at, which may be days old,
+  // so clamp every scenario to today — an ETA in the past is never a useful answer.
+  const project = (days: number, rate: number): Scenario => {
+    const projected = addDays(series.current.observedAt, days);
+    return {
+      etaIso: toTime(projected) < toTime(nowIso) ? nowIso : projected,
+      days,
+      rate,
+    };
   };
 
-  const central = project(centralRate > 0 ? centralRate : Math.max(...positive));
-  const optimistic = project(Math.max(...positive));
-  const pessimistic = project(Math.min(...positive));
+  const centralDays = gapDays / preferred.rate;
+  const margin = Math.max(centralDays * MIN_MARGIN_FRACTION, MIN_MARGIN_DAYS);
+  const fastestDays = Math.min(gapDays / Math.max(...rates), centralDays - margin);
+  const slowestDays = Math.max(gapDays / Math.min(...rates), centralDays + margin);
+
+  const central = project(centralDays, preferred.rate);
 
   return {
     status: 'estimated',
     gapDays,
     central,
-    optimistic,
-    pessimistic,
+    optimistic: project(Math.max(fastestDays, 0), gapDays / Math.max(fastestDays, 1)),
+    pessimistic: project(slowestDays, gapDays / slowestDays),
     cardIso: addBusinessDays(central.etaIso, 15),
   };
 }

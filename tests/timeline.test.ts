@@ -28,9 +28,9 @@ const makeSeries = (overrides: Partial<StampSeries> = {}): StampSeries => ({
   lastAdvanceAt: '2026-03-01T00:00:00Z',
   daysSinceAdvance: 0,
   pace: {
-    d30: { rate: 1, spanDays: 30 },
-    d90: { rate: 1, spanDays: 90 },
-    all: { rate: 0.5, spanDays: 120 },
+    d30: { rate: 1, spanDays: 30, observations: 3 },
+    d90: { rate: 1, spanDays: 90, observations: 5 },
+    all: { rate: 0.5, spanDays: 120, observations: 8 },
   },
   ...overrides,
 });
@@ -47,11 +47,25 @@ test('pace measures backlog days cleared per calendar day', () => {
   assert.ok(all);
   assert.ok(Math.abs(all.rate - 61 / 59) < 1e-9);
 
-  // The window starts 2026-01-30, when the last observed value was still 2025-10-01,
-  // so the whole 61-day advance observed on 2026-02-01 falls inside the 30-day window.
+  // The 30-day window contains the Feb and Mar observations: 30 submission days over 28 days.
   const recent = paceOverWindow(points, 30, '2026-03-01T00:00:00Z');
   assert.ok(recent);
-  assert.ok(Math.abs(recent.rate - 61 / 30) < 1e-9);
+  assert.equal(recent.observations, 2);
+  assert.ok(Math.abs(recent.rate - 30 / 28) < 1e-9);
+});
+
+test('pace ignores windows containing a single observation after a sparse gap', () => {
+  // A four-month gap followed by one fresh observation must not be read as a 30-day burst.
+  const sparse: SeriesPoint[] = [
+    { observedAt: '2026-01-20T00:00:00Z', date: '2025-10-31' },
+    { observedAt: '2026-05-18T00:00:00Z', date: '2026-02-09' },
+  ];
+  assert.equal(paceOverWindow(sparse, 30, '2026-05-18T00:00:00Z'), null);
+
+  const overall = paceOverWindow(sparse, null, '2026-05-18T00:00:00Z');
+  assert.ok(overall);
+  // 101 submission days over the real 118-day span, not over 30 days.
+  assert.ok(Math.abs(overall.rate - 101 / 118) < 1e-9);
 });
 
 test('pace returns null for too-short windows or single points', () => {
@@ -67,10 +81,10 @@ test('estimate flags dates already reached', () => {
 
 test('estimate projects an ETA with a range', () => {
   const series = makeSeries();
-  const result = estimate(series, '2026-01-01T00:00:00Z');
+  const result = estimate(series, '2026-01-01T00:00:00Z', '2026-03-01T00:00:00Z');
   assert.equal(result.status, 'estimated');
   assert.equal(result.gapDays, 31);
-  // Central uses the 90-day rate of 1 d/day starting from the current observation.
+  // Central uses the most recent window's rate of 1 d/day from the current observation.
   assert.equal(result.central!.etaIso.slice(0, 10), '2026-04-01');
   // Pessimistic uses the slowest positive rate (0.5 d/day) → twice as long.
   assert.equal(result.pessimistic!.etaIso.slice(0, 10), '2026-05-02');
@@ -78,9 +92,32 @@ test('estimate projects an ETA with a range', () => {
   assert.ok(toTime(result.cardIso!) > toTime(result.central!.etaIso));
 });
 
+test('estimate never returns a scenario date in the past', () => {
+  const series = makeSeries({
+    pace: {
+      d30: { rate: 5, spanDays: 30, observations: 4 },
+      d90: null,
+      all: { rate: 5, spanDays: 90, observations: 8 },
+    },
+  });
+  // The current observation is old and the queue is fast, so the raw projection lands in the past.
+  const now = '2026-06-01T00:00:00Z';
+  const result = estimate(series, '2026-01-01T00:00:00Z', now);
+  assert.equal(result.status, 'estimated');
+  for (const scenario of [result.optimistic!, result.central!, result.pessimistic!]) {
+    assert.ok(toTime(scenario.etaIso) >= toTime(now));
+  }
+});
+
 test('estimate reports stalls and missing history', () => {
   const stalled = estimate(
-    makeSeries({ pace: { d30: { rate: 0, spanDays: 30 }, d90: null, all: { rate: 0, spanDays: 90 } } }),
+    makeSeries({
+      pace: {
+        d30: { rate: 0, spanDays: 30, observations: 3 },
+        d90: null,
+        all: { rate: 0, spanDays: 90, observations: 5 },
+      },
+    }),
     '2026-01-01T00:00:00Z',
   );
   assert.equal(stalled.status, 'stalled');

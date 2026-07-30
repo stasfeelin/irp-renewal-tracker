@@ -76,11 +76,14 @@ export function buildTimeline(dataset: Dataset, nowIso = new Date().toISOString(
     observedAt: latest.observedAt,
   }));
 
+  const split = snapshots.find((snapshot) => snapshot.rows.length > 1);
+
   return {
     generatedAt: nowIso,
     sourceUrl: dataset.sourceUrl,
     latestObservedAt: latest.observedAt,
     observationCount: snapshots.length,
+    categorySplitAt: split ? split.observedAt : null,
     groups,
     stamps,
   };
