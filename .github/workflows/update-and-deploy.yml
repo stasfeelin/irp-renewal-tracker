@@ -1,0 +1,70 @@
+name: Update data and deploy
+
+on:
+  schedule:
+    # Twice daily, shortly after ISD typically publishes updates.
+    - cron: '15 7,16 * * *'
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm test
+
+      - name: Collect new observations
+        # Never fail the run on a Wayback outage — the dataset is append-only.
+        continue-on-error: true
+        run: node scripts/collect.ts --save
+
+      - name: Derive timeline
+        run: node scripts/derive.ts
+
+      - name: Commit dataset if changed
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/observations.json public/data/timeline.json
+          if git diff --staged --quiet; then
+            echo "No data changes."
+          else
+            git commit -m "chore(data): update IRP processing timelines"
+            git push
+          fi
+
+      - run: npm run build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: update
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
