@@ -129,12 +129,25 @@ function distinctSeries(timeline: Timeline): StampSeries[] {
   });
 }
 
+/** ISD state that the table is refreshed every Monday, so that is the next one due. */
+function nextMonday(from: Date): Date {
+  const next = new Date(from);
+  next.setUTCHours(0, 0, 0, 0);
+  // On a Monday the refresh is due that same day, so only advance on other days.
+  next.setUTCDate(next.getUTCDate() + ((8 - next.getUTCDay()) % 7));
+  return next;
+}
+
 function renderStatus(timeline: Timeline): void {
   const staleDays = (Date.now() - toTime(timeline.latestObservedAt)) / DAY;
   $('#freshness').textContent =
     `ISD last updated this ${fmtDate(timeline.latestObservedAt)}` +
     `${staleDays > 1.5 ? ` (${Math.round(staleDays)} days ago)` : ''} · ` +
     `${timeline.observationCount} updates recorded since ${fmtDate(timeline.stamps[0].first.observedAt)}`;
+
+  $('#cadence').textContent =
+    `ISD say the table is updated every Monday, so the next one is due ` +
+    `${fmtDate(nextMonday(new Date()).toISOString())}.`;
 
   const body = $('#status-table tbody');
   body.innerHTML = '';
