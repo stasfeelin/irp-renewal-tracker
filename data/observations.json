@@ -1,6 +1,6 @@
 {
   "sourceUrl": "https://www.irishimmigration.ie/registering-your-immigration-permission/how-to-renew-your-current-permission/renewing-your-registration-permission-if-you-live-in-the-republic-of-ireland/",
-  "generatedAt": "2026-08-13T08:47:58.183Z",
+  "generatedAt": "2026-08-13T17:16:05.142Z",
   "checked": [
     "20241107122402",
     "20241203162400",
@@ -16,8 +16,11 @@
     "20260721092043",
     "20260811170007",
     "20260811215456",
+    "20260811220001",
+    "20260811220008",
     "20260812171520",
-    "20260813084622"
+    "20260813084622",
+    "20260813170055"
   ],
   "snapshots": [
     {
@@ -2285,6 +2288,94 @@
       ]
     },
     {
+      "timestamp": "20260811220001",
+      "observedAt": "2026-08-11T22:00:01Z",
+      "rows": [
+        {
+          "label": "1, 1H",
+          "members": [
+            "1",
+            "1H"
+          ],
+          "date": "2026-07-25"
+        },
+        {
+          "label": "1G",
+          "members": [
+            "1G"
+          ],
+          "date": "2026-05-12"
+        },
+        {
+          "label": "2, 2A, 1A",
+          "members": [
+            "2",
+            "2A",
+            "1A"
+          ],
+          "date": "2026-05-20"
+        },
+        {
+          "label": "4",
+          "members": [
+            "4"
+          ],
+          "date": "2026-04-22"
+        },
+        {
+          "label": "All other categories",
+          "members": [
+            "OTHER"
+          ],
+          "date": "2026-06-02"
+        }
+      ]
+    },
+    {
+      "timestamp": "20260811220008",
+      "observedAt": "2026-08-11T22:00:08Z",
+      "rows": [
+        {
+          "label": "1, 1H",
+          "members": [
+            "1",
+            "1H"
+          ],
+          "date": "2026-07-25"
+        },
+        {
+          "label": "1G",
+          "members": [
+            "1G"
+          ],
+          "date": "2026-05-12"
+        },
+        {
+          "label": "2, 2A, 1A",
+          "members": [
+            "2",
+            "2A",
+            "1A"
+          ],
+          "date": "2026-05-20"
+        },
+        {
+          "label": "4",
+          "members": [
+            "4"
+          ],
+          "date": "2026-04-22"
+        },
+        {
+          "label": "All other categories",
+          "members": [
+            "OTHER"
+          ],
+          "date": "2026-06-02"
+        }
+      ]
+    },
+    {
       "timestamp": "20260812171520",
       "observedAt": "2026-08-12T17:15:20Z",
       "rows": [
@@ -2331,6 +2422,50 @@
     {
       "timestamp": "20260813084622",
       "observedAt": "2026-08-13T08:46:22Z",
+      "rows": [
+        {
+          "label": "1, 1H",
+          "members": [
+            "1",
+            "1H"
+          ],
+          "date": "2026-07-25"
+        },
+        {
+          "label": "1G",
+          "members": [
+            "1G"
+          ],
+          "date": "2026-05-12"
+        },
+        {
+          "label": "2, 2A, 1A",
+          "members": [
+            "2",
+            "2A",
+            "1A"
+          ],
+          "date": "2026-05-20"
+        },
+        {
+          "label": "4",
+          "members": [
+            "4"
+          ],
+          "date": "2026-04-22"
+        },
+        {
+          "label": "All other categories",
+          "members": [
+            "OTHER"
+          ],
+          "date": "2026-06-02"
+        }
+      ]
+    },
+    {
+      "timestamp": "20260813170055",
+      "observedAt": "2026-08-13T17:00:55Z",
       "rows": [
         {
           "label": "1, 1H",
