@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-16T12:38:34.330Z",
+  "generatedAt": "2026-09-16T19:35:55.889Z",
   "sourceUrl": "https://www.irishimmigration.ie/registering-your-immigration-permission/how-to-renew-your-current-permission/renewing-your-registration-permission-if-you-live-in-the-republic-of-ireland/",
   "latestObservedAt": "2026-09-15T19:43:02Z",
   "observationCount": 155,
@@ -160,12 +160,12 @@
         }
       ],
       "lastAdvanceAt": "2026-09-14T14:08:49Z",
-      "daysSinceAdvance": 1.9373302083333332,
+      "daysSinceAdvance": 2.2271630671296294,
       "pace": {
         "d30": {
-          "rate": 0.20533506769640514,
-          "spanDays": 29.220532407407408,
-          "observations": 4
+          "rate": 0.605527116962048,
+          "spanDays": 8.257268518518519,
+          "observations": 3
         },
         "d90": {
           "rate": 0.8702179423924324,
@@ -301,12 +301,12 @@
         }
       ],
       "lastAdvanceAt": "2026-09-14T14:08:49Z",
-      "daysSinceAdvance": 1.9373302083333332,
+      "daysSinceAdvance": 2.2271630671296294,
       "pace": {
         "d30": {
-          "rate": 1.437345473874836,
-          "spanDays": 29.220532407407408,
-          "observations": 6
+          "rate": 1.3961477740545973,
+          "spanDays": 21.487696759259258,
+          "observations": 5
         },
         "d90": {
           "rate": 1.2935672116644266,
@@ -438,12 +438,12 @@
         }
       ],
       "lastAdvanceAt": "2026-09-14T14:08:49Z",
-      "daysSinceAdvance": 1.9373302083333332,
+      "daysSinceAdvance": 2.2271630671296294,
       "pace": {
         "d30": {
-          "rate": 1.642680541571241,
-          "spanDays": 29.220532407407408,
-          "observations": 6
+          "rate": 1.6288390697303636,
+          "spanDays": 21.487696759259258,
+          "observations": 5
         },
         "d90": {
           "rate": 1.1289313847253177,
@@ -567,12 +567,12 @@
         }
       ],
       "lastAdvanceAt": "2026-09-14T14:08:49Z",
-      "daysSinceAdvance": 1.9373302083333332,
+      "daysSinceAdvance": 2.2271630671296294,
       "pace": {
         "d30": {
-          "rate": 0.20533506769640514,
-          "spanDays": 29.220532407407408,
-          "observations": 4
+          "rate": 0.605527116962048,
+          "spanDays": 8.257268518518519,
+          "observations": 3
         },
         "d90": {
           "rate": 0.8702179423924324,
@@ -708,12 +708,12 @@
         }
       ],
       "lastAdvanceAt": "2026-09-14T14:08:49Z",
-      "daysSinceAdvance": 1.9373302083333332,
+      "daysSinceAdvance": 2.2271630671296294,
       "pace": {
         "d30": {
-          "rate": 1.437345473874836,
-          "spanDays": 29.220532407407408,
-          "observations": 6
+          "rate": 1.3961477740545973,
+          "spanDays": 21.487696759259258,
+          "observations": 5
         },
         "d90": {
           "rate": 1.2935672116644266,
@@ -849,12 +849,12 @@
         }
       ],
       "lastAdvanceAt": "2026-09-14T14:08:49Z",
-      "daysSinceAdvance": 1.9373302083333332,
+      "daysSinceAdvance": 2.2271630671296294,
       "pace": {
         "d30": {
-          "rate": 1.437345473874836,
-          "spanDays": 29.220532407407408,
-          "observations": 6
+          "rate": 1.3961477740545973,
+          "spanDays": 21.487696759259258,
+          "observations": 5
         },
         "d90": {
           "rate": 1.2935672116644266,
@@ -986,12 +986,12 @@
         }
       ],
       "lastAdvanceAt": "2026-09-14T14:08:49Z",
-      "daysSinceAdvance": 1.9373302083333332,
+      "daysSinceAdvance": 2.2271630671296294,
       "pace": {
         "d30": {
-          "rate": 3.045803504163343,
-          "spanDays": 29.220532407407408,
-          "observations": 6
+          "rate": 2.978448584649808,
+          "spanDays": 21.487696759259258,
+          "observations": 5
         },
         "d90": {
           "rate": 1.9573354994639212,
@@ -1127,12 +1127,12 @@
         }
       ],
       "lastAdvanceAt": "2026-09-14T14:08:49Z",
-      "daysSinceAdvance": 1.9373302083333332,
+      "daysSinceAdvance": 2.2271630671296294,
       "pace": {
         "d30": {
-          "rate": 2.224463233377722,
-          "spanDays": 29.220532407407408,
-          "observations": 6
+          "rate": 2.606142511568582,
+          "spanDays": 21.487696759259258,
+          "observations": 5
         },
         "d90": {
           "rate": 1.4229239328308692,
