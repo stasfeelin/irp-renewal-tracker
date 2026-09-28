@@ -1,6 +1,6 @@
 {
   "sourceUrl": "https://www.irishimmigration.ie/registering-your-immigration-permission/how-to-renew-your-current-permission/renewing-your-registration-permission-if-you-live-in-the-republic-of-ireland/",
-  "generatedAt": "2026-09-27T19:47:47.662Z",
+  "generatedAt": "2026-09-28T15:33:36.714Z",
   "checked": [
     "20241102200218",
     "20241107122402",
@@ -150,7 +150,9 @@
     "20260926191412",
     "20260927130551",
     "20260927155203",
-    "20260927194633"
+    "20260927194633",
+    "20260928090156",
+    "20260928153254"
   ],
   "snapshots": [
     {
@@ -8310,6 +8312,94 @@
             "OTHER"
           ],
           "date": "2026-08-20"
+        }
+      ]
+    },
+    {
+      "timestamp": "20260928090156",
+      "observedAt": "2026-09-28T09:01:56Z",
+      "rows": [
+        {
+          "label": "1, 1H",
+          "members": [
+            "1",
+            "1H"
+          ],
+          "date": "2026-08-06"
+        },
+        {
+          "label": "1G",
+          "members": [
+            "1G"
+          ],
+          "date": "2026-07-20"
+        },
+        {
+          "label": "2, 2A, 1A",
+          "members": [
+            "2",
+            "2A",
+            "1A"
+          ],
+          "date": "2026-07-20"
+        },
+        {
+          "label": "4",
+          "members": [
+            "4"
+          ],
+          "date": "2026-08-17"
+        },
+        {
+          "label": "All other categories",
+          "members": [
+            "OTHER"
+          ],
+          "date": "2026-08-20"
+        }
+      ]
+    },
+    {
+      "timestamp": "20260928153254",
+      "observedAt": "2026-09-28T15:32:54Z",
+      "rows": [
+        {
+          "label": "1, 1H",
+          "members": [
+            "1",
+            "1H"
+          ],
+          "date": "2026-08-07"
+        },
+        {
+          "label": "1G",
+          "members": [
+            "1G"
+          ],
+          "date": "2026-07-31"
+        },
+        {
+          "label": "2, 2A, 1A",
+          "members": [
+            "2",
+            "2A",
+            "1A"
+          ],
+          "date": "2026-07-31"
+        },
+        {
+          "label": "4",
+          "members": [
+            "4"
+          ],
+          "date": "2026-08-23"
+        },
+        {
+          "label": "All other categories",
+          "members": [
+            "OTHER"
+          ],
+          "date": "2026-09-04"
         }
       ]
     }
