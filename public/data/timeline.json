@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-10-11T14:07:16.225Z",
+  "generatedAt": "2026-10-11T20:22:00.604Z",
   "sourceUrl": "https://www.irishimmigration.ie/registering-your-immigration-permission/how-to-renew-your-current-permission/renewing-your-registration-permission-if-you-live-in-the-republic-of-ireland/",
-  "latestObservedAt": "2026-10-11T14:06:32Z",
-  "observationCount": 231,
+  "latestObservedAt": "2026-10-11T20:21:11Z",
+  "observationCount": 233,
   "categorySplitAt": "2026-04-08T18:15:54Z",
   "groups": [
     {
@@ -12,7 +12,7 @@
         "1H"
       ],
       "date": "2026-08-12",
-      "observedAt": "2026-10-11T14:06:32Z"
+      "observedAt": "2026-10-11T20:21:11Z"
     },
     {
       "label": "1G",
@@ -20,7 +20,7 @@
         "1G"
       ],
       "date": "2026-08-10",
-      "observedAt": "2026-10-11T14:06:32Z"
+      "observedAt": "2026-10-11T20:21:11Z"
     },
     {
       "label": "2, 2A, 1A",
@@ -30,7 +30,7 @@
         "1A"
       ],
       "date": "2026-08-12",
-      "observedAt": "2026-10-11T14:06:32Z"
+      "observedAt": "2026-10-11T20:21:11Z"
     },
     {
       "label": "4",
@@ -38,7 +38,7 @@
         "4"
       ],
       "date": "2026-08-28",
-      "observedAt": "2026-10-11T14:06:32Z"
+      "observedAt": "2026-10-11T20:21:11Z"
     },
     {
       "label": "All other categories",
@@ -46,7 +46,7 @@
         "OTHER"
       ],
       "date": "2026-09-08",
-      "observedAt": "2026-10-11T14:06:32Z"
+      "observedAt": "2026-10-11T20:21:11Z"
     }
   ],
   "stamps": [
@@ -54,7 +54,7 @@
       "stamp": "1",
       "label": "1, 1H",
       "current": {
-        "observedAt": "2026-10-11T14:06:32Z",
+        "observedAt": "2026-10-11T20:21:11Z",
         "date": "2026-08-12"
       },
       "first": {
@@ -171,26 +171,26 @@
           "date": "2026-08-12"
         },
         {
-          "observedAt": "2026-10-11T14:06:32Z",
+          "observedAt": "2026-10-11T20:21:11Z",
           "date": "2026-08-12"
         }
       ],
       "lastAdvanceAt": "2026-10-05T13:19:37Z",
-      "daysSinceAdvance": 6.0330928819444445,
+      "daysSinceAdvance": 6.29332875,
       "pace": {
         "d30": {
-          "rate": 0.33335291038611237,
-          "spanDays": 26.998414351851853,
+          "rate": 0.3301711743920324,
+          "spanDays": 27.258587962962963,
           "observations": 5
         },
         "d90": {
-          "rate": 0.4136329337200253,
-          "spanDays": 82.1984837962963,
+          "rate": 0.41232783881035784,
+          "spanDays": 82.4586574074074,
           "observations": 10
         },
         "all": {
-          "rate": 0.9472725072783349,
-          "spanDays": 703.0711805555555,
+          "rate": 0.9469220959004476,
+          "spanDays": 703.3313541666666,
           "observations": 28
         }
       }
@@ -199,7 +199,7 @@
       "stamp": "1A",
       "label": "2, 2A, 1A",
       "current": {
-        "observedAt": "2026-10-11T14:06:32Z",
+        "observedAt": "2026-10-11T20:21:11Z",
         "date": "2026-08-12"
       },
       "first": {
@@ -328,26 +328,26 @@
           "date": "2026-08-12"
         },
         {
-          "observedAt": "2026-10-11T14:06:32Z",
+          "observedAt": "2026-10-11T20:21:11Z",
           "date": "2026-08-12"
         }
       ],
       "lastAdvanceAt": "2026-10-05T13:19:37Z",
-      "daysSinceAdvance": 6.0330928819444445,
+      "daysSinceAdvance": 6.29332875,
       "pace": {
         "d30": {
-          "rate": 1.2963724292793257,
-          "spanDays": 26.998414351851853,
+          "rate": 1.2839990115245705,
+          "spanDays": 27.258587962962963,
           "observations": 5
         },
         "d90": {
-          "rate": 1.372856460337817,
-          "spanDays": 85.95217592592593,
+          "rate": 1.368713422539388,
+          "spanDays": 86.21234953703704,
           "observations": 13
         },
         "all": {
-          "rate": 0.9472725072783349,
-          "spanDays": 703.0711805555555,
+          "rate": 0.9469220959004476,
+          "spanDays": 703.3313541666666,
           "observations": 31
         }
       }
@@ -356,7 +356,7 @@
       "stamp": "1G",
       "label": "1G",
       "current": {
-        "observedAt": "2026-10-11T14:06:32Z",
+        "observedAt": "2026-10-11T20:21:11Z",
         "date": "2026-08-10"
       },
       "first": {
@@ -481,26 +481,26 @@
           "date": "2026-08-10"
         },
         {
-          "observedAt": "2026-10-11T14:06:32Z",
+          "observedAt": "2026-10-11T20:21:11Z",
           "date": "2026-08-10"
         }
       ],
       "lastAdvanceAt": "2026-10-05T13:19:37Z",
-      "daysSinceAdvance": 6.0330928819444445,
+      "daysSinceAdvance": 6.29332875,
       "pace": {
         "d30": {
-          "rate": 1.0370979434234606,
-          "spanDays": 26.998414351851853,
+          "rate": 1.0271992092196565,
+          "spanDays": 27.258587962962963,
           "observations": 5
         },
         "d90": {
-          "rate": 1.3030501996426738,
-          "spanDays": 85.95217592592593,
+          "rate": 1.299117824783148,
+          "spanDays": 86.21234953703704,
           "observations": 12
         },
         "all": {
-          "rate": 0.9444278450943159,
-          "spanDays": 703.0711805555555,
+          "rate": 0.9440784860028487,
+          "spanDays": 703.3313541666666,
           "observations": 30
         }
       }
@@ -509,7 +509,7 @@
       "stamp": "1H",
       "label": "1, 1H",
       "current": {
-        "observedAt": "2026-10-11T14:06:32Z",
+        "observedAt": "2026-10-11T20:21:11Z",
         "date": "2026-08-12"
       },
       "first": {
@@ -626,26 +626,26 @@
           "date": "2026-08-12"
         },
         {
-          "observedAt": "2026-10-11T14:06:32Z",
+          "observedAt": "2026-10-11T20:21:11Z",
           "date": "2026-08-12"
         }
       ],
       "lastAdvanceAt": "2026-10-05T13:19:37Z",
-      "daysSinceAdvance": 6.0330928819444445,
+      "daysSinceAdvance": 6.29332875,
       "pace": {
         "d30": {
-          "rate": 0.33335291038611237,
-          "spanDays": 26.998414351851853,
+          "rate": 0.3301711743920324,
+          "spanDays": 27.258587962962963,
           "observations": 5
         },
         "d90": {
-          "rate": 0.4136329337200253,
-          "spanDays": 82.1984837962963,
+          "rate": 0.41232783881035784,
+          "spanDays": 82.4586574074074,
           "observations": 10
         },
         "all": {
-          "rate": 0.9472725072783349,
-          "spanDays": 703.0711805555555,
+          "rate": 0.9469220959004476,
+          "spanDays": 703.3313541666666,
           "observations": 28
         }
       }
@@ -654,7 +654,7 @@
       "stamp": "2",
       "label": "2, 2A, 1A",
       "current": {
-        "observedAt": "2026-10-11T14:06:32Z",
+        "observedAt": "2026-10-11T20:21:11Z",
         "date": "2026-08-12"
       },
       "first": {
@@ -783,26 +783,26 @@
           "date": "2026-08-12"
         },
         {
-          "observedAt": "2026-10-11T14:06:32Z",
+          "observedAt": "2026-10-11T20:21:11Z",
           "date": "2026-08-12"
         }
       ],
       "lastAdvanceAt": "2026-10-05T13:19:37Z",
-      "daysSinceAdvance": 6.0330928819444445,
+      "daysSinceAdvance": 6.29332875,
       "pace": {
         "d30": {
-          "rate": 1.2963724292793257,
-          "spanDays": 26.998414351851853,
+          "rate": 1.2839990115245705,
+          "spanDays": 27.258587962962963,
           "observations": 5
         },
         "d90": {
-          "rate": 1.372856460337817,
-          "spanDays": 85.95217592592593,
+          "rate": 1.368713422539388,
+          "spanDays": 86.21234953703704,
           "observations": 13
         },
         "all": {
-          "rate": 0.9472725072783349,
-          "spanDays": 703.0711805555555,
+          "rate": 0.9469220959004476,
+          "spanDays": 703.3313541666666,
           "observations": 31
         }
       }
@@ -811,7 +811,7 @@
       "stamp": "2A",
       "label": "2, 2A, 1A",
       "current": {
-        "observedAt": "2026-10-11T14:06:32Z",
+        "observedAt": "2026-10-11T20:21:11Z",
         "date": "2026-08-12"
       },
       "first": {
@@ -940,26 +940,26 @@
           "date": "2026-08-12"
         },
         {
-          "observedAt": "2026-10-11T14:06:32Z",
+          "observedAt": "2026-10-11T20:21:11Z",
           "date": "2026-08-12"
         }
       ],
       "lastAdvanceAt": "2026-10-05T13:19:37Z",
-      "daysSinceAdvance": 6.0330928819444445,
+      "daysSinceAdvance": 6.29332875,
       "pace": {
         "d30": {
-          "rate": 1.2963724292793257,
-          "spanDays": 26.998414351851853,
+          "rate": 1.2839990115245705,
+          "spanDays": 27.258587962962963,
           "observations": 5
         },
         "d90": {
-          "rate": 1.372856460337817,
-          "spanDays": 85.95217592592593,
+          "rate": 1.368713422539388,
+          "spanDays": 86.21234953703704,
           "observations": 13
         },
         "all": {
-          "rate": 0.9472725072783349,
-          "spanDays": 703.0711805555555,
+          "rate": 0.9469220959004476,
+          "spanDays": 703.3313541666666,
           "observations": 31
         }
       }
@@ -968,7 +968,7 @@
       "stamp": "4",
       "label": "4",
       "current": {
-        "observedAt": "2026-10-11T14:06:32Z",
+        "observedAt": "2026-10-11T20:21:11Z",
         "date": "2026-08-28"
       },
       "first": {
@@ -1093,26 +1093,26 @@
           "date": "2026-08-28"
         },
         {
-          "observedAt": "2026-10-11T14:06:32Z",
+          "observedAt": "2026-10-11T20:21:11Z",
           "date": "2026-08-28"
         }
       ],
       "lastAdvanceAt": "2026-10-05T13:19:37Z",
-      "daysSinceAdvance": 6.0330928819444445,
+      "daysSinceAdvance": 6.29332875,
       "pace": {
         "d30": {
-          "rate": 0.8519018820978427,
-          "spanDays": 26.998414351851853,
+          "rate": 0.8437707790018606,
+          "spanDays": 27.258587962962963,
           "observations": 5
         },
         "d90": {
-          "rate": 1.9894784298115822,
-          "spanDays": 85.95217592592593,
+          "rate": 1.983474536052842,
+          "spanDays": 86.21234953703704,
           "observations": 13
         },
         "all": {
-          "rate": 0.9700298047504871,
-          "spanDays": 703.0711805555555,
+          "rate": 0.9696709750812391,
+          "spanDays": 703.3313541666666,
           "observations": 30
         }
       }
@@ -1121,7 +1121,7 @@
       "stamp": "OTHER",
       "label": "All other categories",
       "current": {
-        "observedAt": "2026-10-11T14:06:32Z",
+        "observedAt": "2026-10-11T20:21:11Z",
         "date": "2026-09-08"
       },
       "first": {
@@ -1250,26 +1250,26 @@
           "date": "2026-09-08"
         },
         {
-          "observedAt": "2026-10-11T14:06:32Z",
+          "observedAt": "2026-10-11T20:21:11Z",
           "date": "2026-09-08"
         }
       ],
       "lastAdvanceAt": "2026-10-05T13:19:37Z",
-      "daysSinceAdvance": 6.0330928819444445,
+      "daysSinceAdvance": 6.29332875,
       "pace": {
         "d30": {
-          "rate": 1.0370979434234606,
-          "spanDays": 26.998414351851853,
+          "rate": 1.0271992092196565,
+          "spanDays": 27.258587962962963,
           "observations": 5
         },
         "d90": {
-          "rate": 1.5939096192057707,
-          "spanDays": 85.95217592592593,
+          "rate": 1.589099482100815,
+          "spanDays": 86.21234953703704,
           "observations": 13
         },
         "all": {
-          "rate": 0.9856754467625917,
-          "spanDays": 703.0711805555555,
+          "rate": 0.9853108295180333,
+          "spanDays": 703.3313541666666,
           "observations": 31
         }
       }
