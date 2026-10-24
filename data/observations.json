@@ -1,6 +1,6 @@
 {
   "sourceUrl": "https://www.irishimmigration.ie/registering-your-immigration-permission/how-to-renew-your-current-permission/renewing-your-registration-permission-if-you-live-in-the-republic-of-ireland/",
-  "generatedAt": "2026-10-23T19:58:33.351Z",
+  "generatedAt": "2026-10-24T12:02:41.080Z",
   "checked": [
     "20241102200218",
     "20241107122402",
@@ -229,7 +229,8 @@
     "20261023090128",
     "20261023123942",
     "20261023170024",
-    "20261023195803"
+    "20261023195803",
+    "20261024090026"
   ],
   "snapshots": [
     {
@@ -11827,6 +11828,50 @@
     {
       "timestamp": "20261023195803",
       "observedAt": "2026-10-23T19:58:03Z",
+      "rows": [
+        {
+          "label": "1, 1H",
+          "members": [
+            "1",
+            "1H"
+          ],
+          "date": "2026-08-24"
+        },
+        {
+          "label": "1G",
+          "members": [
+            "1G"
+          ],
+          "date": "2026-08-25"
+        },
+        {
+          "label": "2, 2A, 1A",
+          "members": [
+            "2",
+            "2A",
+            "1A"
+          ],
+          "date": "2026-08-26"
+        },
+        {
+          "label": "4",
+          "members": [
+            "4"
+          ],
+          "date": "2026-09-07"
+        },
+        {
+          "label": "All other categories",
+          "members": [
+            "OTHER"
+          ],
+          "date": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "timestamp": "20261024090026",
+      "observedAt": "2026-10-24T09:00:26Z",
       "rows": [
         {
           "label": "1, 1H",
